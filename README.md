@@ -2,7 +2,7 @@
 
 ## 1. Linear data flow with container style types (Box):
 
-Imperative Approach:
+### Imperative Approach:
 - Procedural, multi statements
 - Many intermediate states/variables
 - Multiple function calls
@@ -24,7 +24,7 @@ const nextCharForNumberStringNested = str =>
 console.log(nextCharForNumberStringNested(' 64 '));
 ```
 
-Functional Approach:
+### Functional Approach:
 - Unnested functions
 - Smaller, chainable functions avoiding assignments
 - Linear data flow
