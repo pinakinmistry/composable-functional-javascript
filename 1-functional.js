@@ -21,4 +21,4 @@ const nextCharForNumberStringUsingBox = str =>
   .map(i => i + 1)
   .map(i => String.fromCharCode(i))
 
-console.log(nextCharForNumberStringUsingBox(' 64 '));
+console.log(nextCharForNumberStringUsingBox(' 64 ')); //Box(A)

@@ -16,12 +16,12 @@ const nextCharForNumberString = str => {
   return String.fromCharCode(nextNumber);
 }
 
-console.log(nextCharForNumberString(' 64 '));
+console.log(nextCharForNumberString(' 64 ')); //A
 
 const nextCharForNumberStringNested = str =>
   String.fromCharCode(parseInt(str.trim()) + 1);
 
-console.log(nextCharForNumberStringNested(' 64 '));
+console.log(nextCharForNumberStringNested(' 64 ')); //A
 ```
 
 ### Functional Approach:
@@ -45,7 +45,6 @@ console.log(nextCharForNumberString(' 64 ')); // ['A']
 //Using a custom container, say Box
 const Box = x => ({
   map: f => Box(f(x)),
-  fold: f => f(x),
   inspect: () => `Box(${x})`
 });
 
@@ -56,7 +55,7 @@ const nextCharForNumberStringUsingBox = str =>
   .map(i => i + 1)
   .map(i => String.fromCharCode(i))
 
-console.log(nextCharForNumberStringUsingBox(' 64 '));
+console.log(nextCharForNumberStringUsingBox(' 64 ')); //Box(A)
 ```
 
 ## 2. Refactor imperative code to a single composed expression using Box:
@@ -108,5 +107,5 @@ const applyDiscount = (price, discount) =>
     .fold(savings =>
       cost - cost * savings));
 
-console.log(applyDiscount('$5.00', '20%'));
+console.log(applyDiscount('$5.00', '20%')); //4
 ```
