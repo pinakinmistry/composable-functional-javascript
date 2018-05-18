@@ -1,6 +1,11 @@
 # Composable Functional JavaScript
 
-## 1. Linear data flow with container style types (Box):
+## `Box`
+
+### Think inside the `Box`:
+
+
+## 1. Linear data flow with container style types (`Box`)
 
 ### Imperative Approach:
 - Procedural, multi statements
@@ -29,7 +34,7 @@ console.log(nextCharForNumberStringNested(' 64 ')); //A
 - Smaller, chainable functions avoiding assignments
 - Linear data flow
 - Container style type
-- Functions excutes within a context (Array/Box/.../Container)
+- Functions excutes within a context (`Array/Box/.../Container`)
 
 ```js
 //Using Array
@@ -40,7 +45,7 @@ const nextCharForNumberString = str =>
   .map(i => i + 1)
   .map(i => String.fromCharCode(i))
 
-console.log(nextCharForNumberString(' 64 ')); // ['A']
+console.log(nextCharForNumberString(' 64 ')); //['A']
 
 //Using a custom container, say Box
 const Box = x => ({
@@ -58,10 +63,9 @@ const nextCharForNumberStringUsingBox = str =>
 console.log(nextCharForNumberStringUsingBox(' 64 ')); //Box(A)
 ```
 
-## 2. Refactor imperative code to a single composed expression using Box:
+## 2. Refactor imperative code to a single composed expression using `Box`
 
 ### Imperative Approach:
-
 ```js
 //Imperative
 const moneyToFloat = str =>
@@ -108,4 +112,57 @@ const applyDiscount = (price, discount) =>
       cost - cost * savings));
 
 console.log(applyDiscount('$5.00', '20%')); //4
+```
+
+> `Box` supports linear data flow. How about branching? Here comes `Either`
+
+## `Either`
+
+### Where should I go? `Either` `Right` or `Left`:
+- `Either = Right || Left;`
+- `Right` container is for happy path when data is not `null` and function(s) need to be applied
+- `Left` container is for unhappy path when data is `null` and function(s) need to be skipped
+- Yay! these are containers for branching in a linear data flow
+
+## 3. Common is `null` check with composable code branching using `Either`
+
+### `Right` and `Left`:
+```js
+const Right = x => ({
+  map: f => Right(f(x)),
+  fold: (f, g) => g(x),
+  inspect: () => `Right(${x})` 
+});
+
+const Left = x => ({
+  map: f => Left(x),
+  fold: (f, g) => f(x),
+  inspect: () => `Left(${x})`  
+});
+
+console.log(
+  Right(2)
+  .map(x => x + 1)
+  .map(x => x * 2)
+); //Right(6)
+
+console.log(
+  Right(2)
+  .map(x => x + 1)
+  .map(x => x * 2)
+  .fold(x => 'error', x => x)
+); //6
+
+console.log(
+  Left(2)
+  .map(x => x + 1)
+  .map(x => x * 2)
+); //Left(2)
+
+console.log(
+  Left(2)
+  .map(x => x + 1)
+  .map(x => x * 2)
+  .fold(x => 'error', x => x)
+); //Error
 ```
