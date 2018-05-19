@@ -289,26 +289,8 @@ console.log(getPort('noSuchFile.json')); //3000
 
 ## 5. More examples on usage of `Either`:
 
+### Example 1:
 ```js
-const Right = x => ({
-  chain: f => f(x),
-  map: f => Right(f(x)),
-  fold: (f, g) => g(x),
-  inspect: () => `Right(${x})`
-});
-
-const Left = x => ({
-  chain: f => Left(x),
-  map: f => Left(x),
-  fold: (f, g) => f(x),
-  inspect: () => `Left(${x})`
-});
-
-const fromNullable = x =>
-  x != null ? Right(x) : Left(null);
-
-
-//Example 1:
 //Imperative
 const openSite = (currentUser) => {
   if(currentUser) {
@@ -322,9 +304,10 @@ const openSite = (currentUser) => {
 const openSiteFunc = (currentUser) =>
   fromNullable(currentUser)
   .fold(showLogin, renderPage);
+```
 
-
-//Example 2:
+### Example 2:
+```js
 //Imperative
 const loadPrefs = pref => {
   console.log(`loading ${pref}`);
@@ -347,9 +330,10 @@ const getPrefsFunc = user =>
   .fold(() => defaultPrefs, loadPrefs);
 
 console.log(getPrefsFunc({ premium: true, preferences: 'netflix' })); //loading netflix
+```
 
-
-//Example 3:
+### Example 3:
+```js
 //Imperative
 const user = { address: { street: {name: 'Main street'} } };
 const streetName = user => {
@@ -372,11 +356,11 @@ const streetNameFunc = user =>
   .map((street) => street.name)
   .fold(() => 'no street', streetName => streetName);
 
-
 console.log(streetNameFunc(user)); //Main street
+```
 
-
-//Example 4:
+### Example 4:
+```js
 //Imperative
 const concatUniq = (x, ys) => {
   const found = ys.filter(y => y === x)[0];
@@ -392,9 +376,10 @@ const concatUniqFunc = (x, ys) =>
 
 console.log(concatUniqFunc(3, [1, 2])); //[1, 2, 3]
 console.log(concatUniqFunc(2, [1, 2])); //[1, 2]
+```
 
-
-//Example 5
+### Example 5
+```js
 //Imperative
 const fs = require('fs');
 const wrapExamples = example => {
