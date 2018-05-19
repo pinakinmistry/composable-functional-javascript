@@ -339,14 +339,14 @@ const getPrefs = user => {
   }
 };
 
-console.log(getPrefs({ premium: true, preferences: 'netflix' }));
+console.log(getPrefs({ premium: true, preferences: 'netflix' })); //loading netflix
 
 const getPrefsFunc = user =>
   (user.premium ? Right(user) : Left('not premium'))
   .map(user => user.preferences)
   .fold(() => defaultPrefs, loadPrefs);
 
-console.log(getPrefsFunc({ premium: true, preferences: 'netflix' }));
+console.log(getPrefsFunc({ premium: true, preferences: 'netflix' })); //loading netflix
 
 
 //Example 3:
