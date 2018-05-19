@@ -55,3 +55,30 @@ const getPrefsFunc = user =>
   .fold(() => defaultPrefs, loadPrefs);
 
 console.log(getPrefsFunc({ premium: true, preferences: 'netflix' }));
+
+
+//Example 3:
+//Imperative
+const user = { address: { street: {name: 'Main street'} } };
+const streetName = user => {
+  const address = user.address;
+  if(address) {
+    const street = address.street;
+    if(street) {
+      return street.name;
+    }
+    return 'no street';
+  }
+}
+
+console.log(streetName(user)); //Main street
+
+//Functional
+const streetNameFunc = user =>
+  fromNullable(user.address)
+  .chain((address) => fromNullable(address.street))
+  .map((street) => street.name)
+  .fold(() => 'no street', streetName => streetName);
+
+
+console.log(streetNameFunc(user)); //Main street
