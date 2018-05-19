@@ -348,6 +348,7 @@ const getPrefsFunc = user =>
 
 console.log(getPrefsFunc({ premium: true, preferences: 'netflix' }));
 
+
 //Example 3:
 //Imperative
 const user = { address: { street: {name: 'Main street'} } };
