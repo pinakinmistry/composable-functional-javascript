@@ -109,7 +109,7 @@ console.log(concatUniqFunc(3, [1, 2])); //[1, 2, 3]
 console.log(concatUniqFunc(2, [1, 2])); //[1, 2]
 
 
-//Example 5
+//Example 5:
 //Imperative
 const fs = require('fs');
 const wrapExamples = example => {
@@ -132,3 +132,27 @@ const wrapExamplesFunc = example =>
 
 console.log(wrapExamplesFunc({previewPath: 'noSuchFile.js'})); //{ previewPath: 'noSuchFile.js' }
 console.log(wrapExamplesFunc({previewPath: '4-config.json'})); //{ previewPath: '4-config.json', preview: '{ "port": 8888 }' }
+
+
+//Example 6
+//Imperative
+const parseDbUrl = cfg => {
+  try {
+    const c = JSON.parse(cfg);
+    if(c.url) {
+      return c.url.match(/http:\/\/someurl/);
+    }
+  } catch (e) {
+    return null;
+  }
+};
+
+console.log(parseDbUrl('{ "url": "http://someurl" }')); //[ 'http://someurl', index: 0, input: 'http://someurl' ]
+
+//Functional
+const parseDbUrlFunc = cfg =>
+  tryCatch(() => JSON.parse(cfg))
+  .chain(c => fromNullable(c.url))
+  .fold(() => null, url => url.match(/http:\/\/someurl/));
+
+console.log(parseDbUrlFunc('{ "url": "http://someurl" }')); //[ 'http://someurl', index: 0, input: 'http://someurl' ]
