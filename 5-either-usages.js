@@ -15,6 +15,13 @@ const Left = x => ({
 const fromNullable = x =>
   x != null ? Right(x) : Left(null);
 
+const tryCatch = f => {
+  try {
+    return Right(f());
+  } catch(e) {
+    return Left(e);
+  }
+};
 
 //Example 1:
 //Imperative
@@ -100,3 +107,28 @@ const concatUniqFunc = (x, ys) =>
 
 console.log(concatUniqFunc(3, [1, 2])); //[1, 2, 3]
 console.log(concatUniqFunc(2, [1, 2])); //[1, 2]
+
+
+//Example 5
+//Imperative
+const fs = require('fs');
+const wrapExamples = example => {
+  if(example.previewPath) {
+    try {
+      example.preview = fs.readFileSync(example.previewPath).toString();
+    } catch(e) {}
+  }
+  return example;
+};
+
+console.log(wrapExamples({previewPath: 'noSuchFile.js'})); //{ previewPath: 'noSuchFile.js' }
+console.log(wrapExamples({previewPath: '4-config.json'})); //{ previewPath: '4-config.json', preview: '{ "port": 8888 }' }
+
+//Functional
+const wrapExamplesFunc = example =>
+  fromNullable(example.previewPath)
+  .chain((previewPath) => tryCatch(() => fs.readFileSync(previewPath).toString()))
+  .fold(() => example, (preview) => Object.assign(example, { preview }));
+
+console.log(wrapExamplesFunc({previewPath: 'noSuchFile.js'})); //{ previewPath: 'noSuchFile.js' }
+console.log(wrapExamplesFunc({previewPath: '4-config.json'})); //{ previewPath: '4-config.json', preview: '{ "port": 8888 }' }
