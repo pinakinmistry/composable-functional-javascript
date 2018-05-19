@@ -373,4 +373,22 @@ const streetNameFunc = user =>
 
 
 console.log(streetNameFunc(user)); //Main street
+
+
+//Example 4:
+//Imperative
+const concatUniq = (x, ys) => {
+  const found = ys.filter(y => y === x)[0];
+  return found ? ys : ys.concat(x);
+}
+
+console.log(concatUniq(3, [1, 2])); //[1, 2, 3]
+console.log(concatUniq(2, [1, 2])); //[1, 2]
+
+const concatUniqFunc = (x, ys) =>
+  fromNullable(ys.filter(y => y === x)[0])
+  .fold(() => ys.concat(x), () => ys);
+
+console.log(concatUniqFunc(3, [1, 2])); //[1, 2, 3]
+console.log(concatUniqFunc(2, [1, 2])); //[1, 2]
 ```
