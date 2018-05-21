@@ -470,3 +470,48 @@ const First = x => ({
 
 console.log(First('blah').concat('rest').concat('in peace')) //First(blah)
 ```
+
+## 7. SemiGroup example:
+
+- Combining 2 accounts into one
+- `name` as is from any account
+- `isPaid` only if both accounts is paid
+- `points` to be summed together
+- `friends` to be concatenated together
+
+```js
+const { Map } = require('immutable-ext');
+
+const Sum = x => ({
+  x,
+  concat: ({ x: y }) => Sum(x + y),
+  inspect: () => `Sum(${x})`,
+});
+
+const All = x => ({
+  x,
+  concat: ({ x: y }) => All(x && y),
+  inspect: () => `All(${x})`,
+});
+
+const First = x => ({
+  concat: _ => First(x),
+  inspect: () => `First(${x})`,
+});
+
+const acct1 = Map({
+  name: First('Pinakin N Mistry'),
+  isPaid: All(true),
+  points: Sum(10),
+  friends: ['Preeti'],
+});
+
+const acct2 = Map({
+  name: First('Pinakin Mistry'),
+  isPaid: All(false),
+  points: Sum(20),
+  friends: ['Priya'],
+});
+
+console.log(acct1.concat(acct2).toJS());
+```
