@@ -753,3 +753,42 @@ const resultWithFoldMapList = List.of(1, 2, 3)
   .foldMap(Sum, Sum.empty());
 console.log(resultWithFoldMap); //Sum(8)
 ```
+
+## `LazyBox`
+- Takes a function `g` instead of a value `x`
+- Executes only when `fold()` method is called
+- So no impure side effects
+- Helps achieve purity by virtue of laziness
+- Similar to types like `Promise`, `Observable` and `Stream`
+
+# 11. Delay evaluation with LazyBox
+```js
+const Box = x => ({
+  fold: f => f(x),
+  map: f => Box(f(x)),
+  inspect: () => `Box(${x})`,
+});
+
+const resultWithBox = Box(' 64 ')
+  .map(str => str.trim())
+  .map(trimmed => new Number(trimmed))
+  .map(number => number + 1)
+  .map(nextNumber => String.fromCharCode(nextNumber))
+  .fold(nextChar => nextChar.toLowerCase());
+
+console.log(resultWithBox); //a
+
+const LazyBox = g => ({
+  fold: f => f(g()),
+  map: f => LazyBox(() => f(g())),
+});
+
+const resultWithLazyBox = LazyBox(() => ' 64 ')
+  .map(str => str.trim())
+  .map(trimmed => new Number(trimmed))
+  .map(number => number + 1)
+  .map(nextNumber => String.fromCharCode(nextNumber))
+  .fold(nextChar => nextChar.toLowerCase());
+
+console.log(resultWithLazyBox); //a
+```
