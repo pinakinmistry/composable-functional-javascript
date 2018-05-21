@@ -428,3 +428,44 @@ const parseDbUrlFunc = cfg =>
 
 console.log(parseDbUrlFunc('{ "url": "http://someurl" }')); //[ 'http://someurl', index: 0, input: 'http://someurl' ]
 ```
+
+## `SemiGroups`
+- Combines two types into one.
+- A container type with `.concat()` method that are associative
+- Associate: `(x + y) + z === x + (y + z)`
+- `String` and `Array` are examples of SemiGroups
+- `('a'.concat('b')).concat('c') === 'a'.(concat('b').concat('c'))`
+- `([1, 2].concat([3, 4])).concat([5, 6]) === [1, 2].(concat([3, 4]).concat([5, 6]))`
+- Name SemiGroup comes from abstract algebra
+
+## 6. Create Types with `SemiGroups`
+
+```js
+//Sum SemiGroup for addition
+const Sum = x => ({
+  x,
+  concat: ({ x: y }) => Sum(x + y),
+  inspect: () => `Sum(${x})`,
+});
+
+console.log(Sum(1).concat(Sum(2))); //Sum(3)
+
+
+//All SemiGroup for conjunction
+const All = x => ({
+  x,
+  concat: ({ x: y }) => All(x && y),
+  inspect: () => `All(${x})`,
+});
+
+console.log(All(true).concat(All(false))); //Sum(false)
+console.log(All(true).concat(All(true))); //Sum(true)
+
+//First SemiGroup to keep first and ingore rest
+const First = x => ({
+  concat: _ => First(x),
+  inspect: () => `First(${x})`,
+});
+
+console.log(First('blah').concat('rest').concat('in peace')) //First(blah)
+```
