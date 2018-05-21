@@ -22,3 +22,5 @@ const applyDiscount = (price, discount) =>
       cost - cost * savings));
 
 console.log(applyDiscount('$5.00', '20%'));
+
+module.exports = Box;
