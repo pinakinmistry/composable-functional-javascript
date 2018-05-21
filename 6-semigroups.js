@@ -18,6 +18,7 @@ const All = x => ({
 console.log(All(true).concat(All(false))); //Sum(false)
 console.log(All(true).concat(All(true))); //Sum(true)
 
+
 //First SemiGroup to keep first and ingore rest
 const First = x => ({
   concat: _ => First(x),
