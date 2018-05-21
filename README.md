@@ -590,7 +590,7 @@ console.log(first([1, 2, 3])); //1
 console.log(first([])); //TypeError: Reduce of empty array with no initial value
 ```
 
-## 9. More example on usage of `Monoid`s
+## 9. More examples on usage of `Monoid`s
 
 ### Example 1:
 ```js
@@ -715,4 +715,41 @@ const Pair = (x, y) => ({
   y,
   concat: ({ x: x1, y: y1 }) => Pair(x.concat(x1), y.concat(y1)),
 });
+```
+
+## 10. Unbox types  with `foldMap`:
+
+```js
+const { Map, List } = require('immutable-ext');
+const Sum = x => ({
+  x,
+  concat: ({ x: y }) => Sum(x + y),
+  inspect: () => `Sum(${x})`,
+});
+Sum.empty = () => Sum(0);
+
+const result = [Sum(1), Sum(2), Sum(3)]
+  .reduce((acc, x) => acc.concat(x), Sum.empty());
+console.log(result);  //Sum(6)
+
+const resultWithList = List.of(Sum(1), Sum(2), Sum(3))
+  .fold(Sum.empty());
+console.log(resultWithList);  //Sum(6)
+
+const resultWithMap = Map({brian: Sum(3), sarah: Sum(5)})
+  .fold(Sum.empty());
+console.log(resultWithMap); //Sum(8)
+
+const resultWithMapFold = Map({brian: 3, sarah: 5})
+  .map(Sum)
+  .fold(Sum.empty());
+console.log(resultWithMapFold); //Sum(8)
+
+const resultWithFoldMap = Map({brian: 3, sarah: 5})
+  .foldMap(Sum, Sum.empty());
+console.log(resultWithFoldMap); //Sum(8)
+
+const resultWithFoldMapList = List.of(1, 2, 3)
+  .foldMap(Sum, Sum.empty());
+console.log(resultWithFoldMap); //Sum(8)
 ```
