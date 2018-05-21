@@ -761,7 +761,7 @@ console.log(resultWithFoldMap); //Sum(8)
 - Helps achieve purity by virtue of laziness
 - Similar to types like `Promise`, `Observable` and `Stream`
 
-# 11. Delay evaluation with LazyBox
+## 11. Delay evaluation with LazyBox
 ```js
 const Box = x => ({
   fold: f => f(x),
