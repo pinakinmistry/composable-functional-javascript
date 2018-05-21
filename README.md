@@ -514,4 +514,13 @@ const acct2 = Map({
 });
 
 console.log(acct1.concat(acct2).toJS());
+/*
+OUTPUT:
+{
+  name: First(Pinakin N Mistry),
+  isPaid: All(false),
+  points: Sum(30),
+  friends: [ 'Preeti', 'Priya' ]
+}
+*/
 ```
