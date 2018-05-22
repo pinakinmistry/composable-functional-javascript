@@ -1,10 +1,17 @@
 # Composable Functional JavaScript
+- Category theory
 
 Using
 - Box
 - Either (Right or Left)
 - fromNullable
 - SemiGroup
+- Monoid
+- LazyBox
+- Task
+- Functor
+- Monad
+
 
 ## `Box`
 
@@ -924,4 +931,67 @@ Either.of('hello') //Right('hello')
 Box.of('hello') //Box('hello')
 
 Either.of('hello').map(x => x + '!').fold(x => x);
+```
+
+## `Monad`
+- Any type with `of` and `chain (flatMap, bind, >>=)` methods
+- Allows nesting of computation
+- Box, Either, Task, List are examples of Monads
+- 
+
+## 16. You've been using `Monad`
+
+```js
+httpGet('/user')
+.map(user =>
+  httpGet('/comments/${user.id}')); //Task(Task([Comment]))
+
+//Simplify nested computation using chain
+httpGet('/user')
+.chain(user =>
+  httpGet('/comments/${user.id}')); //Task([Comment])
+```
+
+```js
+httpGet('/user')
+.map(user =>
+  httpGet('/comments/${user.id}')
+  .map(comment => updateDOM(user, comment))); //Task(Task(Task([DOM])))
+
+//Simplify nested computation using chain
+httpGet('/user')
+.chain(user =>
+  httpGet('/comments/${user.id}')
+  .chain(comment => updateDOM(user, comment))); //Task([DOM])
+```
+
+## Principles of `Monad`
+
+### Associative while mapping
+- `join(m.map(join)) == join(join(m))`
+
+```js
+const join = m =>
+  m.chain(x => x);
+
+const m = Box(Box(Box(3)));
+const res1 = join(m.map(join));
+const res2 = join(join(m));
+
+console.log(res1, res2);
+```
+
+### `Monad` is Implicative and pointed `Functor`
+- `join(Box.of(m)) == join(m.map(Box.of))`
+- We can derive `map` using `chain` and `of`: `m.chain(x => M.of(f(x)))`
+
+```js
+const join = m =>
+  m.chain(x => x);
+
+const m = Box('wonder');
+const res1 = join(Box.of(m));
+const res2 = join(m.map(Box.of));
+
+console.log(res1, res2);
 ```
