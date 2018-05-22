@@ -913,3 +913,15 @@ const res4 = id(Box('crayons'));
 
 console.log(res3, res4);
 ```
+
+## 15. Lift into a pointed Functor with `of`
+- `of` is a generic interface to add a value into a container type and map over it
+- Avoid any constructor complexity
+
+```js
+Task.of('hello') //Task('hello')
+Either.of('hello') //Right('hello')
+Box.of('hello') //Box('hello')
+
+Either.of('hello').map(x => x + '!').fold(x => x);
+```
