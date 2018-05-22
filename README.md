@@ -1075,7 +1075,7 @@ console.log(res3); //Box(5)
 const liftA3 = (f, fx, fy, fz) =>
   fx.map(f).ap(fy).ap(fz);
 
-  const add2 = x => y => z => x + y + z;
+const add2 = x => y => z => x + y + z;
 const res4 = liftA3(add2, Box(2), Box(3), Box(4))
 console.log(res4); //Box(9)
 ```
